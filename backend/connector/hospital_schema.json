@@ -1,0 +1,929 @@
+{
+  "database": "hospital_db",
+  "discovered_at": "2026-01-31T07:56:37.732604",
+  "total_tables": 7,
+  "tables": {
+    "allergies": {
+      "table_name": "allergies",
+      "columns": [
+        {
+          "name": "allergy_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('allergies_allergy_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "allergen",
+          "type": "VARCHAR(200)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "allergy_type",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "severity",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "reaction",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "onset_date",
+          "type": "DATE",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": "'Active'::character varying",
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "allergy_id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "idx_allergies_patient",
+          "columns": [
+            "patient_id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "laboratory_results": {
+      "table_name": "laboratory_results",
+      "columns": [
+        {
+          "name": "lab_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('laboratory_results_lab_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "encounter_id",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "test_name",
+          "type": "VARCHAR(200)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "test_code",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "test_category",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "result_value",
+          "type": "VARCHAR(500)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "result_unit",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "reference_range",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "abnormal_flag",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "test_date",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "ordered_by",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "performed_by",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": "'Pending'::character varying",
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "lab_id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "idx_lab_results_encounter",
+          "columns": [
+            "encounter_id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "idx_lab_results_patient",
+          "columns": [
+            "patient_id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "vital_signs": {
+      "table_name": "vital_signs",
+      "columns": [
+        {
+          "name": "vital_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('vital_signs_vital_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "encounter_id",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "measurement_time",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "temperature",
+          "type": "NUMERIC(4, 1)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "temperature_unit",
+          "type": "VARCHAR(1)",
+          "nullable": true,
+          "default": "'C'::character varying",
+          "primary_key": false
+        },
+        {
+          "name": "heart_rate",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "respiratory_rate",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "blood_pressure_systolic",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "blood_pressure_diastolic",
+          "type": "INTEGER",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "oxygen_saturation",
+          "type": "NUMERIC(5, 2)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "weight",
+          "type": "NUMERIC(6, 2)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "weight_unit",
+          "type": "VARCHAR(5)",
+          "nullable": true,
+          "default": "'kg'::character varying",
+          "primary_key": false
+        },
+        {
+          "name": "height",
+          "type": "NUMERIC(6, 2)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "height_unit",
+          "type": "VARCHAR(5)",
+          "nullable": true,
+          "default": "'cm'::character varying",
+          "primary_key": false
+        },
+        {
+          "name": "recorded_by",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "vital_id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "idx_vital_signs_encounter",
+          "columns": [
+            "encounter_id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "patients": {
+      "table_name": "patients",
+      "columns": [
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('patients_patient_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "medical_record_number",
+          "type": "VARCHAR(50)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "date_of_birth",
+          "type": "DATE",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "gender",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "blood_type",
+          "type": "VARCHAR(10)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "phone_number",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "address_line1",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "address_line2",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "city",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "state",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "zip_code",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "emergency_contact_name",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "emergency_contact_phone",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "patient_id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "idx_patients_mrn",
+          "columns": [
+            "medical_record_number"
+          ],
+          "unique": false
+        },
+        {
+          "name": "idx_patients_name",
+          "columns": [
+            "last_name",
+            "first_name"
+          ],
+          "unique": false
+        },
+        {
+          "name": "patients_medical_record_number_key",
+          "columns": [
+            "medical_record_number"
+          ],
+          "unique": true
+        }
+      ]
+    },
+    "encounters": {
+      "table_name": "encounters",
+      "columns": [
+        {
+          "name": "encounter_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('encounters_encounter_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "encounter_type",
+          "type": "VARCHAR(50)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "admission_date",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "discharge_date",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "chief_complaint",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "diagnosis",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "attending_physician",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "department",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "room_number",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "encounter_id"
+      ],
+      "foreign_keys": [
+        {
+          "name": "encounters_patient_id_fkey",
+          "constrained_columns": [
+            "patient_id"
+          ],
+          "referred_table": "patients",
+          "referred_columns": [
+            "patient_id"
+          ]
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_encounters_date",
+          "columns": [
+            "admission_date"
+          ],
+          "unique": false
+        },
+        {
+          "name": "idx_encounters_patient",
+          "columns": [
+            "patient_id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "lab_results": {
+      "table_name": "lab_results",
+      "columns": [
+        {
+          "name": "lab_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('lab_results_lab_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "encounter_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "test_name",
+          "type": "VARCHAR(200)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "test_code",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "result_value",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "result_unit",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "reference_range",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "abnormal_flag",
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "performed_date",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "result_date",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "performing_lab",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "technician_name",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "lab_id"
+      ],
+      "foreign_keys": [
+        {
+          "name": "lab_results_encounter_id_fkey",
+          "constrained_columns": [
+            "encounter_id"
+          ],
+          "referred_table": "encounters",
+          "referred_columns": [
+            "encounter_id"
+          ]
+        },
+        {
+          "name": "lab_results_patient_id_fkey",
+          "constrained_columns": [
+            "patient_id"
+          ],
+          "referred_table": "patients",
+          "referred_columns": [
+            "patient_id"
+          ]
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_lab_encounter",
+          "columns": [
+            "encounter_id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "idx_lab_patient",
+          "columns": [
+            "patient_id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "medications": {
+      "table_name": "medications",
+      "columns": [
+        {
+          "name": "medication_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "nextval('medications_medication_id_seq'::regclass)",
+          "primary_key": false
+        },
+        {
+          "name": "encounter_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "medication_name",
+          "type": "VARCHAR(200)",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "dosage",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "frequency",
+          "type": "VARCHAR(100)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "route",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "start_date",
+          "type": "DATE",
+          "nullable": false,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "end_date",
+          "type": "DATE",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "prescribing_physician",
+          "type": "VARCHAR(200)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "pharmacy_notes",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(50)",
+          "nullable": true,
+          "default": null,
+          "primary_key": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "primary_keys": [
+        "medication_id"
+      ],
+      "foreign_keys": [
+        {
+          "name": "medications_encounter_id_fkey",
+          "constrained_columns": [
+            "encounter_id"
+          ],
+          "referred_table": "encounters",
+          "referred_columns": [
+            "encounter_id"
+          ]
+        },
+        {
+          "name": "medications_patient_id_fkey",
+          "constrained_columns": [
+            "patient_id"
+          ],
+          "referred_table": "patients",
+          "referred_columns": [
+            "patient_id"
+          ]
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_medications_encounter",
+          "columns": [
+            "encounter_id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "idx_medications_patient",
+          "columns": [
+            "patient_id"
+          ],
+          "unique": false
+        }
+      ]
+    }
+  }
+}

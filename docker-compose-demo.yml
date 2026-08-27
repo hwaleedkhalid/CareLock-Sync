@@ -1,0 +1,51 @@
+version: '3.8'
+
+# CareLock Sync — Demo compose (only essential services)
+# Starts in ~15 seconds, no heavy Oracle/SQL Server images needed.
+
+services:
+  hospital_db:
+    image: postgres:15-alpine
+    container_name: carelock_postgres_demo
+    environment:
+      POSTGRES_USER: hospital_user
+      POSTGRES_PASSWORD: hospital_pass
+      POSTGRES_DB: hospital_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_demo_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hospital_user"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - carelock_net
+
+  central_fhir_db:
+    image: postgres:15-alpine
+    container_name: carelock_central_demo
+    environment:
+      POSTGRES_USER: shared_user
+      POSTGRES_PASSWORD: shared_pass
+      POSTGRES_DB: carelock_shared
+    ports:
+      - "5433:5432"
+    volumes:
+      - central_demo_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shared_user"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - carelock_net
+
+volumes:
+  postgres_demo_data:
+  central_demo_data:
+
+networks:
+  carelock_net:
+    driver: bridge

@@ -1,0 +1,63 @@
+{
+    "sources":  [
+                    {
+                        "id":  "postgres_hospital",
+                        "tenant_id": 1,
+                        "connection_string":  "postgresql://hospital_user:hospital_pass@localhost:5435/hospital_db",
+                        "tables":  [
+                                       "patients",
+                                       "encounters",
+                                       "lab_results",
+                                       "medications"
+                                   ]
+                    },
+                    {
+                        "id":  "mysql_hospital",
+                        "tenant_id": 2,
+                        "connection_string":  "mysql://root:root@localhost:3306/hospital_db_mysql",
+                        "tables":  [
+                                       "patients",
+                                       "encounters",
+                                       "lab_results",
+                                       "medications"
+                                   ]
+                    },
+                    {
+                        "id":  "mongodb_hospital",
+                        "tenant_id": 3,
+                        "connection_string":  "mongodb://localhost:27017/hospital_db_mongodb",
+                        "collections":  [
+                                            "patients",
+                                            "encounters",
+                                            "lab_results",
+                                            "medications"
+                                        ]
+                    },
+                    {
+                        "id":  "oracle_hospital",
+                        "tenant_id": 4,
+                        "connection_string":  "oracle://hospital_user:hospital_pass@localhost:1521/XEPDB1",
+                        "tables":  [
+                                       "patients",
+                                       "encounters",
+                                       "lab_results",
+                                       "medications"
+                                   ]
+                    },
+                    {
+                        "id":  "sqlserver_hospital",
+                        "tenant_id": 5,
+                        "connection_string":  "sqlserver://sa:YourStrong@Passw0rd@localhost:1433/hospital_db_sqlserver",
+                        "tables":  [
+                                       "patients",
+                                       "encounters",
+                                       "lab_results",
+                                       "medications"
+                                   ]
+                    }
+                ],
+    "polling_interval":  5,
+    "batch_size":  1000,
+    "gemini_api_key":  "YOUR_GEMINI_API_KEY_HERE",
+    "deduplication":  true
+}

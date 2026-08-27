@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # PostgreSQL - Hospital Database Simulator
+  hospital-db:
+    image: postgres:15-alpine
+    container_name: carelock-hospital-db
+    environment:
+      POSTGRES_USER: hospital_user
+      POSTGRES_PASSWORD: hospital_pass
+      POSTGRES_DB: hospital_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - hospital-data:/var/lib/postgresql/data
+      - ../databases/hospital-dbs:/docker-entrypoint-initdb.d
+    networks:
+      - carelock-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hospital_user -d hospital_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL - Shared Central Database
+  shared-db:
+    image: postgres:15-alpine
+    container_name: carelock-shared-db
+    environment:
+      POSTGRES_USER: shared_user
+      POSTGRES_PASSWORD: shared_pass
+      POSTGRES_DB: carelock_shared
+    ports:
+      - "5433:5432"
+    volumes:
+      - shared-data:/var/lib/postgresql/data
+    networks:
+      - carelock-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shared_user -d carelock_shared"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin - Database Management UI
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: carelock-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@carelock.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    networks:
+      - carelock-network
+    depends_on:
+      - hospital-db
+      - shared-db
+
+volumes:
+  hospital-data:
+  shared-data:
+
+networks:
+  carelock-network:
+    driver: bridge

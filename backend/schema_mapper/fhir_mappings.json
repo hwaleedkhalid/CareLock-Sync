@@ -1,0 +1,306 @@
+{
+  "patient": {
+    "source_table": "patients",
+    "target_resource": "Patient",
+    "field_mappings": [
+      {
+        "source_field": "patient_id",
+        "target_path": "id",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "to_string"
+      },
+      {
+        "source_field": "medical_record_number",
+        "target_path": "identifier[0].value",
+        "data_type": "string",
+        "required": true,
+        "transformation": null
+      },
+      {
+        "source_field": "first_name",
+        "target_path": "name[0].given[0]",
+        "data_type": "string",
+        "required": true,
+        "transformation": null
+      },
+      {
+        "source_field": "last_name",
+        "target_path": "name[0].family",
+        "data_type": "string",
+        "required": true,
+        "transformation": null
+      },
+      {
+        "source_field": "date_of_birth",
+        "target_path": "birthDate",
+        "data_type": "date",
+        "required": true,
+        "transformation": "format_date"
+      },
+      {
+        "source_field": "gender",
+        "target_path": "gender",
+        "data_type": "code",
+        "required": false,
+        "transformation": "normalize_gender"
+      },
+      {
+        "source_field": "phone_number",
+        "target_path": "telecom[0].value",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "email",
+        "target_path": "telecom[1].value",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "address_line1",
+        "target_path": "address[0].line[0]",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "city",
+        "target_path": "address[0].city",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "state",
+        "target_path": "address[0].state",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "zip_code",
+        "target_path": "address[0].postalCode",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      }
+    ]
+  },
+  "encounter": {
+    "source_table": "encounters",
+    "target_resource": "Encounter",
+    "field_mappings": [
+      {
+        "source_field": "encounter_id",
+        "target_path": "id",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "to_string"
+      },
+      {
+        "source_field": "patient_id",
+        "target_path": "subject.reference",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "patient_reference"
+      },
+      {
+        "source_field": "encounter_type",
+        "target_path": "class.code",
+        "data_type": "code",
+        "required": true,
+        "transformation": "map_encounter_class"
+      },
+      {
+        "source_field": "admission_date",
+        "target_path": "period.start",
+        "data_type": "dateTime",
+        "required": true,
+        "transformation": "format_datetime"
+      },
+      {
+        "source_field": "discharge_date",
+        "target_path": "period.end",
+        "data_type": "dateTime",
+        "required": false,
+        "transformation": "format_datetime"
+      },
+      {
+        "source_field": "status",
+        "target_path": "status",
+        "data_type": "code",
+        "required": true,
+        "transformation": "map_encounter_status"
+      },
+      {
+        "source_field": "chief_complaint",
+        "target_path": "reasonCode[0].text",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "diagnosis",
+        "target_path": "diagnosis[0].condition.display",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "attending_physician",
+        "target_path": "participant[0].individual.display",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "department",
+        "target_path": "serviceType.text",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      }
+    ]
+  },
+  "observation": {
+    "source_table": "lab_results",
+    "target_resource": "Observation",
+    "field_mappings": [
+      {
+        "source_field": "lab_result_id",
+        "target_path": "id",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "to_string"
+      },
+      {
+        "source_field": "patient_id",
+        "target_path": "subject.reference",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "patient_reference"
+      },
+      {
+        "source_field": "encounter_id",
+        "target_path": "encounter.reference",
+        "data_type": "integer",
+        "required": false,
+        "transformation": "encounter_reference"
+      },
+      {
+        "source_field": "test_name",
+        "target_path": "code.text",
+        "data_type": "string",
+        "required": true,
+        "transformation": null
+      },
+      {
+        "source_field": "result_value",
+        "target_path": "valueQuantity.value",
+        "data_type": "decimal",
+        "required": false,
+        "transformation": "to_decimal"
+      },
+      {
+        "source_field": "unit",
+        "target_path": "valueQuantity.unit",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "reference_range",
+        "target_path": "referenceRange[0].text",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "status",
+        "target_path": "status",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "performed_date",
+        "target_path": "effectiveDateTime",
+        "data_type": "dateTime",
+        "required": true,
+        "transformation": "format_datetime"
+      }
+    ]
+  },
+  "medication_request": {
+    "source_table": "medications",
+    "target_resource": "MedicationRequest",
+    "field_mappings": [
+      {
+        "source_field": "medication_id",
+        "target_path": "id",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "to_string"
+      },
+      {
+        "source_field": "patient_id",
+        "target_path": "subject.reference",
+        "data_type": "integer",
+        "required": true,
+        "transformation": "patient_reference"
+      },
+      {
+        "source_field": "encounter_id",
+        "target_path": "encounter.reference",
+        "data_type": "integer",
+        "required": false,
+        "transformation": "encounter_reference"
+      },
+      {
+        "source_field": "medication_name",
+        "target_path": "medicationCodeableConcept.text",
+        "data_type": "string",
+        "required": true,
+        "transformation": null
+      },
+      {
+        "source_field": "dosage",
+        "target_path": "dosageInstruction[0].doseAndRate[0].doseQuantity.value",
+        "data_type": "string",
+        "required": false,
+        "transformation": "extract_dosage_value"
+      },
+      {
+        "source_field": "frequency",
+        "target_path": "dosageInstruction[0].timing.code.text",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "route",
+        "target_path": "dosageInstruction[0].route.text",
+        "data_type": "string",
+        "required": false,
+        "transformation": null
+      },
+      {
+        "source_field": "start_date",
+        "target_path": "authoredOn",
+        "data_type": "date",
+        "required": true,
+        "transformation": "format_date"
+      },
+      {
+        "source_field": "status",
+        "target_path": "status",
+        "data_type": "code",
+        "required": true,
+        "transformation": "map_medication_status"
+      }
+    ]
+  }
+}

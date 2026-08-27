@@ -1,0 +1,43 @@
+# CareLock CDC sources — copy to cdc_sources.yaml and edit.
+# One block per source database. The CDC Worker is launched per source:
+#     python -m services.cdc_worker --source hospital_a
+#
+# Secrets (HMAC keys, DB passwords) live in environment variables, not here.
+
+sources:
+  - id: hospital_a
+    db_url: postgresql://carelock:CHANGE_ME@localhost:5435/hospital_a
+    tables:
+      - patients
+      - encounters
+      - lab_results
+      - medications
+    poll_interval_seconds: 5
+    poll_interval_min_seconds: 1
+    listen_notify: true
+    auto_setup: false
+    ingestion_endpoint: http://localhost:8004/api/v1/cdc/ingest
+    ingestion_health_endpoint: http://localhost:8004/healthz
+    auth_key_env: CDC_HMAC_KEY_HOSPITAL_A
+    admin_port: 9101
+    batch:
+      max_rows: 500
+      max_bytes: 1048576       # 1 MB
+      max_latency_ms: 2000
+    retry:
+      max_attempts: 8
+      initial_backoff_ms: 1000
+      max_backoff_ms: 60000
+      jitter_pct: 20
+    schema:
+      unknown_columns_default: store_raw   # store_raw | ignore | reject
+      new_table_policy: require_config     # require_config | ignore | auto_register
+      registry_auto_stub: false
+    fk:
+      max_wait_seconds: 300
+      allow_placeholder_parent: false
+
+  # Add additional source DBs here:
+  # - id: hospital_b
+  #   db_url: postgresql://...
+  #   ...

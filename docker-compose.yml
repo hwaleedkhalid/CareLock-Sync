@@ -1,0 +1,151 @@
+# Docker Compose - All 5 Hospital Databases + Central FHIR Database
+# Hospital DBs: PostgreSQL, MySQL, MongoDB, Oracle XE, SQL Server
+# Central DB: PostgreSQL for FHIR data
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # HOSPITAL DATABASES (5 different platforms for testing interoperability)
+  # ============================================================================
+  
+  # PostgreSQL Hospital Database
+  # NOTE: mapped to host port 5435 — port 5432 is occupied by a native Windows PostgreSQL service
+  postgresql:
+    image: postgres:15-alpine
+    container_name: carelock_postgres
+    environment:
+      POSTGRES_USER: hospital_user
+      POSTGRES_PASSWORD: hospital_pass
+      POSTGRES_DB: hospital_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hospital_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelock_network
+
+  # MySQL Hospital Database
+  mysql:
+    image: mysql:8.0
+    container_name: carelock_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hospital_db_mysql
+      MYSQL_USER: hospital_user
+      MYSQL_PASSWORD: hospital_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelock_network
+
+  # MongoDB Hospital Database
+  mongodb:
+    image: mongo:7.0
+    container_name: carelock_mongodb
+    environment:
+      MONGO_INITDB_DATABASE: hospital_db_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelock_network
+
+  # Oracle XE 21c Hospital Database
+  oracle:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: carelock_oracle
+    environment:
+      ORACLE_PASSWORD: oracle
+      ORACLE_DATABASE: XEPDB1
+      APP_USER: hospital_user
+      APP_USER_PASSWORD: hospital_pass
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - carelock_network
+    shm_size: 1gb
+
+  # SQL Server 2022 Hospital Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: carelock_sqlserver
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: YourStrong@Passw0rd
+      MSSQL_PID: Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      # SQL Server 2022 image moved sqlcmd to /opt/mssql-tools18/bin/
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P YourStrong@Passw0rd -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelock_network
+
+  # ============================================================================
+  # CENTRAL FHIR DATABASE (Where all data is synchronized to)
+  # ============================================================================
+  
+  # Central PostgreSQL Database for FHIR Resources
+  central_fhir_db:
+    image: postgres:15-alpine
+    container_name: carelock_central_fhir
+    environment:
+      POSTGRES_USER: shared_user
+      POSTGRES_PASSWORD: shared_pass
+      POSTGRES_DB: carelock_shared
+    ports:
+      - "5433:5432"  # External port 5433, internal 5432
+    volumes:
+      - central_fhir_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shared_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelock_network
+
+volumes:
+  postgres_data:
+  mysql_data:
+  mongodb_data:
+  oracle_data:
+  sqlserver_data:
+  central_fhir_data:  # Central FHIR database volume
+
+networks:
+  carelock_network:
+    driver: bridge
